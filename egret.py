@@ -22,6 +22,7 @@ import re
 import sys	
 import egret_ext
 from optparse import OptionParser
+import json
 #import time
 
 # Precondition: regexStr successfully compiles and all strings in testStrings
@@ -200,38 +201,38 @@ else:
 
 # print the match strings
 if opts.outputFile:
-    outFile.write("Matches:\n")
+    outFile.write("Matches: " + json.dumps(sorted(matches)) + "\n")
 else:
     print("Matches:")
-for inputStr in sorted(matches):
-    if inputStr == "":
-        dispStr = "<empty>"
-    else:
-        dispStr = inputStr
+    for inputStr in sorted(matches):
+        if inputStr == "":
+            dispStr = "<empty>"
+        else:
+            dispStr = inputStr
 
-    if showGroups:
-        dispStr = groupFmt.format(dispStr, str(groupDict[inputStr]))
+        if showGroups:
+            dispStr = groupFmt.format(dispStr, str(groupDict[inputStr]))
 
-    if opts.outputFile:
-        outFile.write(dispStr + "\n")
-    else:
-        print(dispStr)
+        if opts.outputFile:
+            outFile.write(json.dumps(dispStr) + "\n")
+        else:
+            print(dispStr)
 
 # print the non match strings
 if opts.outputFile:
-    outFile.write("\nNon-matches:\n")
+    outFile.write("Non-matches: " + json.dumps(sorted(nonMatches)) + "\n")
 else:
     print("\nNon-matches:")
-for inputStr in sorted(nonMatches):
-    if inputStr == "":
-        dispStr = "<empty>"
-    else:
-        dispStr = inputStr
+    for inputStr in sorted(nonMatches):
+        if inputStr == "":
+            dispStr = "<empty>"
+        else:
+            dispStr = inputStr
 
-    if opts.outputFile:
-        outFile.write(dispStr + "\n")
-    else:
-        print(dispStr)
+        if opts.outputFile:
+            outFile.write(json.dumps(dispStr) + "\n")
+        else:
+            print(dispStr)
 
 # close the output
 if opts.outputFile:
